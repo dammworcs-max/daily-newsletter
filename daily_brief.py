@@ -64,9 +64,8 @@ def query_notion_database(database_id):
     return "\n".join(rows) if rows else "Nothing found."
 
 
-NOTION_TASKS_DB_ID = "31773cf86ab28067aa80d762d656148a"
+NOTION_TASKS_DB_ID = "31773cf86ab280f996bbf459005e4066"
 NOTION_ASSIGNMENTS_DB_ID = "d0473cf86ab2824fac4f81b2d5197026"
-
 
 def main():
     emails = get_unread_emails()
