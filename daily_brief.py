@@ -65,7 +65,7 @@ def query_notion_database(database_id):
 
 
 NOTION_TASKS_DB_ID = "58e9f2308207464285fe2447a30bbffe"
-NOTION_ASSIGNMENTS_DB_ID = "d0473cf86ab2824fac4f81b2d5197026"
+NOTION_ASSIGNMENTS_DB_ID = "31773cf86ab28067aa80d762d656148a"
 
 
 def main():
