@@ -1,7 +1,7 @@
 """
 Daily brief: pulls unread Gmail, today's calendar events, and Notion
 tasks/assignments, then asks Claude to summarize it all. Posts the
-result as a GitHub Issue in this repo.
+result as a GitHub Issue and texts it via Twilio.
 """
 
 import os
@@ -67,6 +67,7 @@ def query_notion_database(database_id):
 NOTION_TASKS_DB_ID = "31773cf86ab280f996bbf459005e4066"
 NOTION_ASSIGNMENTS_DB_ID = "d0473cf86ab2824fac4f81b2d5197026"
 
+
 def main():
     emails = get_unread_emails()
     events = get_calendar_events()
@@ -106,6 +107,20 @@ ASSIGNMENTS:
         f"https://api.github.com/repos/{repo}/issues",
         headers=gh_headers,
         json={"title": "Daily Brief", "body": brief},
+        timeout=15,
+    )
+
+    sms_body = brief if len(brief) <= 1500 else brief[:1500] + "... (see GitHub for full brief)"
+    twilio_sid = os.environ["TWILIO_ACCOUNT_SID"]
+    twilio_auth = os.environ["TWILIO_AUTH_TOKEN"]
+    requests.post(
+        f"https://api.twilio.com/2010-04-01/Accounts/{twilio_sid}/Messages.json",
+        auth=(twilio_sid, twilio_auth),
+        data={
+            "From": os.environ["TWILIO_FROM_NUMBER"],
+            "To": os.environ["TWILIO_TO_NUMBER"],
+            "Body": sms_body,
+        },
         timeout=15,
     )
 
